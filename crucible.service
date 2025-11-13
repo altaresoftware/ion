@@ -1,0 +1,38 @@
+[Unit]
+Description=Crucible - Ion Application
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/crucible
+Environment="NODE_ENV=production"
+Environment="PORT=3000"
+
+# Adjust the path to your ion binary and application entry point
+ExecStart=/usr/local/bin/ion run /var/www/crucible/index.ts
+
+# Restart policy
+Restart=always
+RestartSec=10s
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/crucible
+
+# Resource limits
+LimitNOFILE=65535
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=crucible
+
+[Install]
+WantedBy=multi-user.target
